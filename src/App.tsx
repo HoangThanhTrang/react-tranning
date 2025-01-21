@@ -1,35 +1,80 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState ,useEffect,useRef,useLayoutEffect} from 'react'
+
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function learnCount() {
+  const [count,setCount] = useState(0)
+  const tangCount = ()=> setCount(count + 1)
+  const giamCount = () => setCount(count - 1)
+  // useEffect(() =>{
+  //   console.log('vô');
+    
+  // },[count])
+  useEffect(()=>{
+    console.log('trước khi thay đổi');
+    return()=>{
+      console.log('sau khi thay đổi');
+    }
+    
+  },[])
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <h1>Count tao đi mày :{count}</h1>
+      <button onClick={tangCount}>Tăng</button>
+      <button onClick={giamCount}>Giảm</button>
+    </div>
   )
 }
 
-export default App
+
+function MouseTracker() {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      setPosition({ x: event.clientX, y: event.clientY });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    console.log(1);
+    
+    return () => {
+    console.log(2);
+
+      window.removeEventListener("mousemove", handleMouseMove); // Dọn dẹp sự kiện
+    };
+  }, []);
+
+  return (
+    <div>
+      <h1>Vị trí chuột:</h1>
+      <p>X: {position.x}, Y: {position.y}</p>
+    </div>
+  );
+}
+function testUseEffect (){
+  const boxRef = useRef(null)
+  const [boxSize,setBoxSize]=useState({width:0,height:0})
+  useLayoutEffect(()=>{
+    const box = boxRef.current;
+    setBoxSize({
+      width:box.offsetWidth,
+      height:box.offsetHeight,
+    })
+  },[])
+  return (
+    <div>
+      <div ref={boxRef} style={{
+        width:"200px",
+        height:"300px",
+        backgroundColor: "lightblue",
+      }}>
+        Đo kích thước
+      </div>
+      <p>Kích thước: {boxSize.width} x {boxSize.height}</p>
+    </div>
+
+  )
+}
+export default testUseEffect;
+
